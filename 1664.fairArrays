@@ -1,0 +1,43 @@
+#include <vector>
+using namespace std;
+
+class Solution {
+public:
+    int waysToMakeFair(vector<int>& a) {
+        const int n = a.size(); // Get the size of the input array
+        
+        // Initialize variables to store prefix sums of even and odd indexed elements
+        int prefixEven = 0, prefixOdd = 0;
+        
+        // Step 1: Compute prefix sums for even and odd indexed elements
+        for(int i = 0; i < n; ++i) {
+            if(i % 2 == 0) // If the index is even
+                prefixEven += a[i]; // Add the element to prefix sum of even indexed elements
+            else
+                prefixOdd += a[i]; // Add the element to prefix sum of odd indexed elements
+        }
+        
+        // Initialize variables to store suffix sums of even and odd indexed elements
+        int suffixEven = 0, suffixOdd = 0;
+        int count = 0; // Initialize count of fair arrays
+        
+        // Step 2: Compute suffix sums and check for fairness
+        for(int i = n - 1; i >= 0; --i) {
+            if(i % 2 == 0) // If the index is even
+                prefixEven -= a[i]; // Adjust prefix sum of even indexed elements
+            else
+                prefixOdd -= a[i]; // Adjust prefix sum of odd indexed elements
+            
+            // Check if adding the current element to either prefix sum makes the array fair
+            if((prefixEven + suffixEven) == (prefixOdd + suffixOdd))
+                ++count; // Increment count if array becomes fair
+            
+            if(i % 2 == 0) // If the index is even
+                suffixOdd += a[i]; // Add the element to suffix sum of odd indexed elements
+            else
+                suffixEven += a[i]; // Add the element to suffix sum of even indexed elements
+        }
+        
+        return count; // Return the count of fair arrays
+    }
+};
